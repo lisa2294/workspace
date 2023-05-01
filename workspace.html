@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.1.1/model-viewer.min.js"></script>
+  <title>Myworkplace</title>
+
+  <style>
+    html,
+    body {
+        margin: 0px;
+        height: 100%;
+    }
+    model-viewer {
+        background-color: unset;
+    }
+    .box {
+        background: linear-gradient(#000000, #292929);
+        height: 100%;
+        overflow-x: hidden;
+    }
+    #myhome {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        z-index: 1;
+    }
+    #cup {
+        position: fixed; top: 30vh; left: 17vw; z-index: 2;
+        width: 10vw; height: 10vh;
+        visibility: hidden;
+    }
+    #phone {
+        position: fixed; top: 5vh; right: 20vw; z-index: 2;
+        width: 15vw; height: 15vh;
+        visibility: hidden;
+    }
+    #lamp {
+        position: fixed; bottom: 10vh; left: 5vw; z-index: 2;
+        width: 10vw; height: 75vh;
+        visibility: hidden;
+    }
+    #mouse {
+        position: fixed; bottom: 15vh; right: 15vw; z-index: 2;
+        width: 10vw; height: 10vh;
+        visibility: hidden;
+    }
+    #keyboard {
+        position: fixed; bottom: 40vh; right: 5vw; z-index: 2;
+        width: 30vw; height: 30vh;
+        visibility: hidden;
+    }
+    #plate {
+        position: fixed; top: 5vh; right: 50vw; z-index: 2;
+        width: 10vw; height: 10vh;
+        visibility: hidden;
+    }
+  </style>
+</head>
+
+<body>
+    <div class="box">
+        <model-viewer id="myhome"
+            src="./assets/myhome.glb"
+            alt="myhome"
+            ar
+            disable-tap
+            camera-controls
+            shadow-intensity="1">
+        </model-viewer>
+        <model-viewer id="cup"
+            src="./assets/cup.glb"
+            alt="cup"
+            ar
+            disable-tap
+            disable-zoom
+            camera-controls
+            shadow-intensity="0">
+        </model-viewer>
+        <model-viewer id="keyboard"
+            src="./assets/keyboard.glb"
+            alt="keyboard"
+            ar
+            disable-tap
+            disable-zoom
+            camera-controls
+            shadow-intensity="0">
+        </model-viewer>
+        <model-viewer id="lamp"
+            src="./assets/lamp.glb"
+            alt="lamp"
+            ar
+            disable-tap
+            disable-zoom
+            camera-controls
+            shadow-intensity="0">
+        </model-viewer>
+        <model-viewer id="mouse"
+            src="./assets/mouse.glb"
+            alt="mouse"
+            ar
+            disable-tap
+            disable-zoom
+            camera-controls
+            shadow-intensity="0">
+        </model-viewer>
+        <model-viewer id="phone"
+            src="./assets/phone.glb"
+            alt="phone"
+            ar
+            disable-tap
+            disable-zoom
+            camera-controls
+            shadow-intensity="0">
+        </model-viewer>
+        <model-viewer id="plate"
+            src="./assets/plate.glb"
+            alt="plate"
+            ar
+            disable-tap
+            disable-zoom
+            camera-controls
+            shadow-intensity="0">
+        </model-viewer>
+    </div>
+
+    <script type="module">
+        const myhomeViewer = document.querySelector("model-viewer#myhome");
+        const cup = document.querySelector("model-viewer#cup");
+        const keyboard = document.querySelector("model-viewer#keyboard");
+        const lamp = document.querySelector("model-viewer#lamp");
+        const mouse = document.querySelector("model-viewer#mouse");
+        const phone = document.querySelector("model-viewer#phone");
+        const plate = document.querySelector("model-viewer#plate");
+        var list = [];
+        list.push(cup);
+        list.push(keyboard);
+        list.push(lamp);
+        list.push(mouse);
+        list.push(phone);
+        list.push(plate);
+        var map = new Map();
+        map.set(0, cup);
+        map.set(2, phone);
+        map.set(4, lamp);
+        map.set(5, keyboard);
+        map.set(6, plate);
+        map.set(7, mouse);
+
+        myhomeViewer.addEventListener("load", () => {
+          const changeColor = (event) => {
+            const material = myhomeViewer.materialFromPoint(event.clientX, event.clientY);
+            const random = Math.floor(Math.random() * 3);
+            if (material != null) {
+              material.pbrMetallicRoughness.
+                setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+              
+                if (map.has(material.index) && random == 0) {
+                    var mappedObject = map.get(material.index);
+                    if (mappedObject.style.visibility === "hidden") {
+                        mappedObject.style.visibility = "visible";
+                    } else {
+                        mappedObject.style.visibility = "hidden";
+                    }
+                }
+                if (material.index == 1) {
+                    for (let i=0; i < list.length; i++) {
+                        if (list[i].style.visibility != "visible") {
+                            return;
+                        }
+                    }
+                    location.href="allworkisdone.html";
+                }
+            }
+          };
+          myhomeViewer.addEventListener("click", changeColor);
+        });
+
+        cup.addEventListener("load", () => {
+            const changeColor = (event) => {
+                const material = cup.materialFromPoint(event.clientX, event.clientY);
+                if (material != null) {
+                    material.pbrMetallicRoughness.
+                        setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+                }
+            };
+            cup.addEventListener("click", changeColor);
+        });
+
+        keyboard.addEventListener("load", () => {
+            const changeColor = (event) => {
+                const material = keyboard.materialFromPoint(event.clientX, event.clientY);
+                if (material != null) {
+                    material.pbrMetallicRoughness.
+                        setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+                }
+            };
+            keyboard.addEventListener("click", changeColor);
+        });
+
+        lamp.addEventListener("load", () => {
+            const changeColor = (event) => {
+                const material = lamp.materialFromPoint(event.clientX, event.clientY);
+                if (material != null) {
+                    material.pbrMetallicRoughness.
+                        setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+                }
+            };
+            lamp.addEventListener("click", changeColor);
+        });
+
+        mouse.addEventListener("load", () => {
+            const changeColor = (event) => {
+                const material = mouse.materialFromPoint(event.clientX, event.clientY);
+                if (material != null) {
+                    material.pbrMetallicRoughness.
+                        setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+                }
+            };
+            mouse.addEventListener("click", changeColor);
+        });
+
+        phone.addEventListener("load", () => {
+            const changeColor = (event) => {
+                const material = phone.materialFromPoint(event.clientX, event.clientY);
+                if (material != null) {
+                    material.pbrMetallicRoughness.
+                        setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+                }
+            };
+            phone.addEventListener("click", changeColor);
+        });
+
+        plate.addEventListener("load", () => {
+            const changeColor = (event) => {
+                const material = plate.materialFromPoint(event.clientX, event.clientY);
+                if (material != null) {
+                    material.pbrMetallicRoughness.
+                        setBaseColorFactor([Math.random(), Math.random(), Math.random()]);
+                }
+            };
+            plate.addEventListener("click", changeColor);
+        });
+    </script>
+</body>
+</html>
